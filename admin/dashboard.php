@@ -40,7 +40,7 @@ if(isset($_SESSION['username'])){
                     <div class='stat st-comments'>
                         <i class='fa fa-comments'></i>
                         <div class='info'>Total comments
-                       <span>2000</span> 
+                       <span><a href="comments.php"><?php echo itemcount('c_id','comments')?></a></span> 
                        </div>
                     </div>
                 </div>
@@ -57,11 +57,12 @@ if(isset($_SESSION['username'])){
                             <span class='toggel-info float-end'>
                                 <i class='fa fa-plus fa-lg'></i>
                             </span>
-                        </div>
+                </div>
                        <div class="card-body">
                        <?php
                       echo'<ul class="list-unstyled lastest-users">';
                        $thelatestusers= getlatest('*','users','date',$numusers);
+                       if(!empty($thelatestusers)){
                        foreach($thelatestusers as $users){
                         echo '<li>'.$users['username'].'<a href="users.php?do=edit&userid='.$users['userid'].'" class="btn btn-success pull-right" ><span ><i class="fa fa-edit"></i>edit';
                        if($users['regesterstatus']==0){
@@ -70,20 +71,20 @@ if(isset($_SESSION['username'])){
                         echo'</span></a></li>';
                        }
                        echo'</ul>';
+                    }else{
+                        echo'There is no users to show';
+                    }
                         ?>
                        </div>
                 
             </div>
-        
-       
-           
         </div>
         <div class="col-sm-6 con-form-label">
             <div class="card card-default">
                 <?php $numitems=5 ?>
                 <div class="card-header">
                     <i class="fa fa-tag"></i>
-                        latest items  <?php echo $numitems?>
+                        latest <?php echo $numitems?> items  
                         <span class='toggel-info float-end'>
                                 <i class='fa fa-plus fa-lg'></i>
                             </span>
@@ -92,6 +93,7 @@ if(isset($_SESSION['username'])){
                         <?php
                       echo'<ul class="list-unstyled lastest-users">';
                        $thelatestitems= getlatest('*','items','item_id',$numitems);
+                    if(!empty($thelatestitems)){
                        foreach($thelatestitems as $items){
                         echo '<li>'.$items['name'].'<a href="items.php?do=edit&itemid='.$items['item_id'].'" class="btn btn-success pull-right" ><span ><i class="fa fa-edit"></i>edit';
                        if($items['Approve']==0){
@@ -99,18 +101,66 @@ if(isset($_SESSION['username'])){
                        }
                         echo'</span></a></li>';
                        }
+                    }else{
+                        echo'There is no items to show';
+                    }
                        echo'</ul>';
                         ?>
                        </div>
-                
             </div>
-        
-       
-           
-        </div>
+       </div>
     </div>
-</div>
-     <?php
+
+     <!-- start latest comment -->
+     <div class="row">
+        <div class="col-sm-6 con-form-label">
+            <div class="card card-default">
+                <?php $numusers=5 ?>
+                <div class="card-header">
+                    <i class="fa fa-comments"></i>
+                        latest <?php echo$numusers?> comments
+                            <span class='toggel-info float-end'>
+                                <i class='fa fa-plus fa-lg'></i>
+                            </span>
+                        </div>
+                       <div class="card-body">
+                        <?php
+                       $stmt=$connect->prepare("SELECT comments.*,users.username AS Member
+                             FROM comments
+                             INNER JOIN users
+                             ON users.userid=comments.user_id
+                             ORDER BY c_id DESC
+                              LIMIT $numusers
+                              ");
+                                $stmt->execute();
+                                $comments=$stmt->fetchALL();
+                                if(!empty($comments)){
+                                foreach($comments as $comment){
+                                    echo'<div class="comment-box">';
+                                    echo '<span class="member-n">'.$comment['Member'].'</span>';
+                                    echo '<p class="member-c">'.$comment['comment'].'</p>';
+                                    echo'</div>';?>
+                                    <div class='btns'>
+                                   <a href='comments.php?do=edit&commid=<?php echo $comment['c_id']?>' class='btn btn-success'><i class='fa fa-edit'></i>Edit</a>
+                                   <a href='comments.php?do=delete&commid=<?php echo $comment['c_id']?>' class='btn btn-danger confirm'><i class='fa fa-close'></i>Delete</a>
+
+                                   </div>
+                                <?php }
+                                    
+                                }else{
+                                    echo'There is no comments to show';
+                                }
+
+    ?>
+                       </div>
+                         </div>
+                           </div>
+                        <!--end latest comment -- -->
+                       </div>
+            </div>         
+                
+     <?php      
+     
     /*end dashboard*/
     include $tpl.'footer.php';
  

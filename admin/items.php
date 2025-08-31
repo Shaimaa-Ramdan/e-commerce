@@ -18,9 +18,11 @@ if(isset($_SESSION['username'])){
                             INNER JOIN
                                  users
                              on
-                                 users.userid=items.users_id;");
+                                 users.userid=items.users_id
+                                 ORDER BY item_id DESC;");
     $stmt->execute();
     $items=$stmt->fetchALL();
+    if(!empty($items)){
     ?>
         <h1 class='text-center'>Manage items</h1>
         <div class="container">
@@ -63,10 +65,13 @@ if(isset($_SESSION['username'])){
         </table>
       <a href="items.php?do=add" class='btn btn-sm btn-primary'><i class="fa fa-plus"></i>Add item</a>
             </div>
+                    <?php }else{
+                        echo'<div class="alert alert-danger">There is no items to show</div>';?>
+                        <a href="items.php?do=add" class='btn btn-sm btn-primary'><i class="fa fa-plus"></i>Add item</a>
+                  <?php  }
         
-        <?php 
-    }
-    elseif($do=='add'){?>
+        
+    }elseif($do=='add'){?>
         <h1 class="text-center">Add New Items</h1>
         <div class="container">
             <form action="?do=insert" method="POST">

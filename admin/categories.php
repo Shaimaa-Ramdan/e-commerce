@@ -20,7 +20,8 @@ if($do =='manage'){
     }
     $stmt=$connect->prepare("SELECT * FROM categories ORDER BY ordering $sort");
     $stmt->execute();
-    $cats=$stmt->fetchall();?>
+    $cats=$stmt->fetchall();
+    if(!empty($cats)){?>
     <h1 class='text-center'>Manage Page</h1>
     <div class='container categories'>
         <div class='card card-default'>
@@ -58,8 +59,12 @@ if($do =='manage'){
           <a class="add-category btn btn-primary" href="categories.php?do=add"><i class="fa fa-add"></i>Add Category</a>
           <?php
     echo"</div>";
+                }else{
+                    echo'<div class="alert alert-danger">There is no category to show</div>';
+                   echo'<a class="add-category btn btn-primary" href="categories.php?do=add"><i class="fa fa-add"></i>Add Category</a>';
+                }
     ?>
-    <hr>
+  
     <?php
 
  } elseif($do =='add'){?>

@@ -21,9 +21,11 @@ if($do =='manage'){//manage page
     if(isset($_GET['page'])&& $_GET['page']=='pending'){
        $quary='and regesterstatus = 0'; 
     }
-    $stmt=$connect->prepare("SELECT * FROM users WHERE groupid!=1 $quary");
+    $stmt=$connect->prepare("SELECT * FROM users WHERE groupid!=1 $quary
+    ORDER BY userid DESC");
     $stmt->execute();
     $rows=$stmt->fetchALL();
+    if(!empty($rows)){
     ?>
         <h1 class='text-center'>Manage Member</h1>
         <div class="container">
@@ -60,7 +62,13 @@ if($do =='manage'){//manage page
                
         </table>
         </table>
-      <a href="users.php?do=Add" class='btn btn-primary'><i class="fa fa-plus"></i>Add Member</a>
+                 <?php   echo'<a href="users.php?do=Add" class="btn btn-primary"><i class="fa fa-plus"></i>Add Member</a>'; }else{
+                    echo'<div class="alert alert-danger">There is not members to show</div>';
+                   
+                    ?>
+                    <a href="users.php?do=Add" class='btn btn-primary'><i class="fa fa-plus"></i>Add Member</a>
+               <?php  }?>
+ 
             </div>
         
         <?php } elseif($do =='Add'){?>
@@ -235,42 +243,59 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
         echo"</div>";
        }
        }
-       elseif($do =="update"){
-        echo "<h1 class='text-center'>Update member</h1>";
-          echo"<div class='container'>";
-if($_SERVER['REQUEST_METHOD'] == 'POST'){
-    $id     =$_POST['userid'];
-    $user   =$_POST['username'];
-    $email  =$_POST['email'];
-    $name   =$_POST['fullname'];
-    //password trick
-    $pass=empty($_POST['newpassword'])?$_POST['oldpassword']:sha1($_POST['newpassword']);
-  
-    //validate the form
-     $formerrors = array();
- if(strlen($user)>20){$formerrors[]='username cant be more than <strong>20 </strong>character';}
- if(strlen($user)<4){$formerrors[]='username cant be less than<strong> 4 </strong>character';}
- if(empty($user)){$formerrors[]='username cant be<strong> empty</strong>';}
- if(empty($pass)){$formerrors[]='password cant be<strong> empty</strong>';}
- if(empty($email)){$formerrors[]='email cant be<strong> empty</strong>';}
- if(empty($name)){$formerrors[]='fullname cant be<strong> empty</strong>';}
- foreach($formerrors as $error){echo '<div class="alert alert-danger">'.$error.'</div>';}
- //update database with this info
-if (empty($formerrors)) {
-    $stmt = $connect->prepare("UPDATE users SET username=?, email=?, userfullname=?, password=? WHERE userid=?");
-    $stmt->execute([$user, $email, $name, $pass, $id]);
+       elseif ($do == "update") {
+    echo "<h1 class='text-center'>Update member</h1>";
+    echo "<div class='container'>";
 
-    $msg='<div class="alert alert-success">'.$stmt->rowCount().'record updated</div>';
-    Redirecthome($msg,'back',4);
-}
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        $id    = $_POST['userid'];
+        $user  = $_POST['username'];
+        $email = $_POST['email'];
+        $name  = $_POST['fullname'];
 
-}else{
-    echo"<div class='continer'>";
-    $msg="<div class='alert alert-danger'>sorry you can/'t browse this page directly</div>";
-    Redirecthome($msg);
-    echo"</div>";
-}
-    echo"</div>";
+        // password trick
+        $pass = empty($_POST['newpassword']) ? $_POST['oldpassword'] : sha1($_POST['newpassword']);
+
+        // validate the form
+        $formerrors = [];
+        if (strlen($user) > 20) $formerrors[] = 'username cant be more than <strong>20</strong> characters';
+        if (strlen($user) < 4)  $formerrors[] = 'username cant be less than <strong>4</strong> characters';
+        if (empty($user))  $formerrors[] = 'username cant be <strong>empty</strong>';
+        if (empty($pass))  $formerrors[] = 'password cant be <strong>empty</strong>';
+        if (empty($email)) $formerrors[] = 'email cant be <strong>empty</strong>';
+        if (empty($name))  $formerrors[] = 'fullname cant be <strong>empty</strong>';
+
+        foreach ($formerrors as $error) {
+            echo '<div class="alert alert-danger">'.$error.'</div>';
+        }
+
+        if (empty($formerrors)) {
+            // check if username already exists (except current user)
+            $stmt2 = $connect->prepare("SELECT * FROM users WHERE username=? AND userid !=?");
+            $stmt2->execute([$user, $id]);
+
+            if ($stmt2->rowCount() > 0) {
+                $msg = '<div class="alert alert-danger">This username already exists</div>';
+                Redirecthome($msg, 'back', 4);
+            } else {
+                // update data
+                $stmt = $connect->prepare("UPDATE users 
+                                           SET username=?, email=?, userfullname=?, password=? 
+                                           WHERE userid=?");
+                $stmt->execute([$user, $email, $name, $pass, $id]);
+
+                $msg = '<div class="alert alert-success">'.$stmt->rowCount().' record updated</div>';
+                Redirecthome($msg, 'back', 4);
+            }
+        }
+    } else {
+        echo "<div class='container'>";
+        $msg = "<div class='alert alert-danger'>Sorry, you can't browse this page directly</div>";
+        Redirecthome($msg);
+        echo "</div>";
+    }
+
+    echo "</div>";
 }elseif($do == 'delete'){//delete page
     echo "<h1 class='text-center'>Delete member</h1>";
     echo"<div class='container'>";
@@ -284,7 +309,7 @@ if (empty($formerrors)) {
        $stmt->bindparam(":zuserid",$userid);
        $stmt->execute();
        $msg='<div class="alert alert-success">'.$stmt->rowCount().' Record deleted</div>';
-       Redirecthome($msg);
+       Redirecthome($msg,'back');
 }
 else{
     $msg="<div class='alert alert-danger'>this id is not exist</div>";

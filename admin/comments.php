@@ -22,9 +22,11 @@ if($do =='manage'){//manage page
                              INNER JOIN items
                              ON items.item_id=comments.item_id
                              INNER JOIN users
-                             ON users.userid=comments.user_id ");
+                             ON users.userid=comments.user_id
+                             ORDER BY c_id DESC ");
     $stmt->execute();
     $rows=$stmt->fetchALL();
+    if(!empty($rows)){
     ?>
         <h1 class='text-center'>Manage comments</h1>
         <div class="container">
@@ -64,9 +66,11 @@ if($do =='manage'){//manage page
 
             </div>
         
-        <?php } 
-        
-    elseif($do =='edit'){//edit page
+        <?php }else{
+            
+            echo'<div class="alert alert-danger">There is no comments to show</div>';
+             
+        }}elseif($do =='edit'){//edit page
         //check if get request commid is numeric and get the interger value of it+
     $commid=isset($_GET['commid']) && is_numeric($_GET['commid'])?intval($_GET['commid']):0;
     //select all data depend on this id
