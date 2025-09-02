@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="<?php echo $css?>backend.css"/>
 </head>
 <body>
+    <body>
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
   <div class="container-fluid">
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -23,7 +24,7 @@
     <div class="collapse navbar-collapse" id="navbarNavDropdown">
       <!-- عناصر على الشمال -->
       <ul class="navbar-nav">
-        
+
         <li class="nav-item"><a class="nav-link categories-link" href="categories.php"><?php echo langs("CATEGORIES")?></a></li>
         <li class="nav-item"><a class="nav-link categories-link" href="items.php"><?php echo langs("ITEMS")?></a></li>
         <li class="nav-item"><a class="nav-link categories-link" href="users.php"><?php echo langs("MEMBERS")?></a></li>
@@ -38,6 +39,7 @@
             Shaimaa
           </a>
           <ul class="dropdown-menu dropdown-menu-end">
+            <li><a class="dropdown-item" href="../index.php">Visit shop</a></li>
             <li><a class="dropdown-item" href="users.php?do=edit&userid=<?php echo $_SESSION['userid']?>">Edit Profile</a></li>
             <li><a class="dropdown-item" href="#">Setting</a></li>
             <li><a class="dropdown-item" href="logout.php">Logout</a></li>
@@ -45,5 +47,5 @@
         </li>
       </ul>
     </div>
-  </div>
+  </div>
 </nav>

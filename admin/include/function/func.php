@@ -73,3 +73,33 @@ function getlatest($select,$table,$order,$limit=5){
     $row=$stmt3->fetchall();
     return $row;
 }
+/*************************************
+ **** function get cat from data base v1.0
+ ****************************************/
+function getcat(){
+    global $connect;
+    $getcat=$connect->prepare("SELECT * FROM categories ORDER BY id ASC ");
+    $getcat->execute();
+    $cats=$getcat->fetchall();
+    return $cats;
+}
+/*************************************
+ **** function get cat from data base v1.0
+ ****************************************/
+function gettcat($catid){
+    global $connect;
+    $getitem=$connect->prepare("SELECT * FROM items WHERE cat_id=? ORDER BY item_id DESC ");
+    $getitem->execute(array($catid));
+    $items=$getitem->fetchall();
+    return $items;
+}
+/*************************************
+ **** function get cat from data base v1.0
+ ****************************************/
+function getitem($itemid){
+    global $connect;
+    $getitem=$connect->prepare("SELECT * FROM items WHERE item_id=? ORDER BY item_id DESC ");
+    $getitem->execute(array($itemid));
+    $items=$getitem->fetchall();
+    return $items;
+}

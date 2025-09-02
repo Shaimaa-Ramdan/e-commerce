@@ -11,7 +11,7 @@ $js='layout/js/';//js directory
 include $func.'func.php';
 include $lang.'english.php';
 include $tpl.'head.php';
-if(!isset($nonavbar)){include $tpl.'navbar.php';}
+
 
 
 

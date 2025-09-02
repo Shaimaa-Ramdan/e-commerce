@@ -69,6 +69,12 @@ color: #fff;
 .dropdown-item:focus{
     color: #000 !important;
 }
+.navbar-item a{
+    color:#fff !important;
+    text-decoration: none;
+    margin-right:100px
+    
+}
 /*end bootstrap edit*/ 
 /*start dashboare edit*/ 
 .home-stat .stat{
