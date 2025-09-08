@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <head>
     <meta charset="utf-8"/>
     <title>
@@ -9,9 +10,27 @@
     <link rel="stylesheet" href="<?php echo $css?>jquery-ui.css"/>
     <link rel="stylesheet" href="<?php echo $css?>jquery.selectBoxIt.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
-    <link rel="stylesheet" href="<?php echo $css?>frontend.css"/>
+    <link rel="stylesheet" href="<?php echo $css?>backend.css"/>
 </head>
 <body>
+  <div class="upper-bar">
+  <div class="container">
+  
+    <?php
+    if(isset($_SESSION['user'])){
+      echo '<div class="session-user">';
+      echo 'welcome '.$sessionuser.'';
+      echo '<a href="profile.php">My Profile  </a>';
+      echo '<a href="newad.php">New Ad  </a>';
+      echo '<a href="logout.php">Logout</a>';
+      echo '</div>';
+     }else{?>
+    <a href="login.php" class="text-black text-decoration-none">
+      <span >Login/Signup</span>
+    </a>
+    <?php }?>
+  </div>  
+</div>
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
   <div class="container-fluid">
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse"

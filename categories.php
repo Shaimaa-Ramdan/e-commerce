@@ -6,11 +6,12 @@ include "init.php";?>
     <div class="row">
     <?php
    
-    foreach(gettcat($_GET['pageid']) as $item){
+    foreach(gettcat('cat_id',$_GET['pageid']) as $item){
   
         echo'<div class="col-sm-6 col-md-4">';
            echo'<div class="thumbnail">';
-             echo'<img src="data/upload/microphone.jpg" alt="microphone" weight="250px" height="300px">';
+           echo'<span class="price-tag">'.$item['price'].'</span>';
+             echo'<img class="img-responsive" src="data/upload/microphone.jpg" alt="microphone" weight="250px" height="300px">';
              echo'<div class="caption">';
              echo'<h3>'.$item['name'].'</h3>';
              echo'<p>'.$item['describtion'].'</p>';

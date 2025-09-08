@@ -25,7 +25,7 @@ body{
 
 } 
 .login .btn{
-     background-color: #008dde;
+    background-color: #008dde;
 }
 /*end login form*/
 
@@ -319,3 +319,117 @@ padding: 3px 10px;
     font-size: 1.25rem;
 }
 /*end item page*/
+/*start login page*/
+.upper-bar{
+position: relative;
+    right: -1250px;
+}
+.upper-bar .session-user{
+    position: relative;
+    right: 84pc;
+}
+.login-img{
+    position: relative;
+    right: -590px;
+    top: -1000px;
+    width: 750px;
+}
+
+.login-form{
+    color:#fff;
+    position: relative;
+    background-color:#574b90;
+    top: -1040px;
+    width: 834px;
+    right: -420px;
+    height: 1000px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);}
+    .login-form .selected{
+        color:#fff;
+    }
+    .login-form h1{
+        color:#bdc3c7
+    }
+    .login-form h1 span{
+        cursor:pointer
+    }
+    .login-form .login input{
+    margin-bottom: 10px;
+    position: relative;
+    width: 500px;
+    border-radius: 15px;
+    height: 40px;
+    right: 150px;
+    background-color: #574b90;
+    color:#fff;
+    border-color:#fff
+    }
+.login-form .signup {
+    
+  display:none;
+}
+
+
+.login-form .signup input{
+    margin-bottom: 10px;
+    position: relative;
+    width: 500px;
+    border-radius: 15px;
+    height: 40px;
+    right: -100px;
+    background-color: #574b90;
+    color: #fff;
+    border: 1px solid #fff;
+}
+
+
+
+.login-form input {
+    margin-bottom: 10px;
+    position: relative;
+    width: 500px;
+    border-radius: 15px;
+    height: 40px;
+    right: -100px;
+    background-color: #574b90;
+    color: #fff;
+    border: 1px solid #fff;
+}
+    .login-form .btnn{
+        background-color:#000 !important;
+        
+    }
+/*end login page*/
+/*start profile page*/
+.information{
+    margin:20px;
+}
+.information ul{
+    padding:0;
+    margin:0;
+}
+.information li{
+    padding:10px;
+}
+.information li:nth-child(odd){
+    background-color: #eee
+}
+.information ul li span{
+    display:inline-block;
+    width:120px
+}
+.live-preview{
+    position:relative;
+    right:100px;
+    top:35px;
+}
+.live-preview p{
+    width:400px;
+}
+.main-form .asterisk{
+    font-size: 25px;
+    color: #f22;
+    position: relative;
+    top: -34px;
+    right: -550px;}
+/*end profile page*/

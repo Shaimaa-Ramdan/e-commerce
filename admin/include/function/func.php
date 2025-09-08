@@ -86,10 +86,10 @@ function getcat(){
 /*************************************
  **** function get cat from data base v1.0
  ****************************************/
-function gettcat($catid){
+function gettcat($where,$value){
     global $connect;
-    $getitem=$connect->prepare("SELECT * FROM items WHERE cat_id=? ORDER BY item_id DESC ");
-    $getitem->execute(array($catid));
+    $getitem=$connect->prepare("SELECT * FROM items WHERE $where=? ORDER BY item_id DESC ");
+    $getitem->execute(array($value));
     $items=$getitem->fetchall();
     return $items;
 }
@@ -102,4 +102,22 @@ function getitem($itemid){
     $getitem->execute(array($itemid));
     $items=$getitem->fetchall();
     return $items;
+}
+/*************************************
+ **** function check status v1.0
+ ****************************************/
+function checkregesterstatus($user){
+    global $connect;
+   $stmtx= $connect->prepare("SELECT 
+                                     username,regesterstatus
+                               FROM 
+                                     users     
+                                WHERE      
+                                      username=? 
+                                AND 
+                                    regesterstatus=0
+                                 ");
+    $stmtx->execute(array($user));
+    $status=$stmtx->rowCount();
+    return $status;
 }
