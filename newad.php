@@ -3,10 +3,42 @@ session_start();
 $pagetitle='Create new item';
 include "init.php";
 if(isset($_SESSION['user'])){
+    
     if($_SERVER['REQUEST_METHOD'] == 'POST'){
-        echo $_POST['name'];
-        echo $_POST['Describtion'];
-    }
+        $formerror=array();
+        $name=strip_tags($_POST['name']);
+        $desc=strip_tags($_POST['Describtion']);
+        $price=filter_var($_POST['price'],FILTER_SANITIZE_NUMBER_INT);
+        $country=strip_tags($_POST['country']);
+        $status=filter_var($_POST['status'],FILTER_SANITIZE_NUMBER_INT);
+        $categories=filter_var($_POST['Categories'],FILTER_SANITIZE_NUMBER_INT);
+        if(empty($name)){$formerror[]='Item title must\'t be <strong>empty</strong>'; }
+        if(empty($desc)){$formerror[]='Describtion must\'t be <strong>empty</strong>'; }
+        if(empty($country)){$formerror[]='country must\'t be <strong>empty</strong>'; }
+        if(empty($price)){$formerror[]='price must\'t be <strong>empty</strong>'; }
+        if(empty($status)){$formerror[]='You must choose the <strong>status</strong>'; }
+        if(empty($categories)){$formerror[]='You must choose the <strong>category</strong>'; }
+        if (empty($formerror)){
+               $stmt=$connect->prepare("INSERT INTO
+                                        items(name,describtion,price,country_made,status,add_date,users_id,cat_id)
+                                    VALUES(:Aname,:Adescribtion,:Aprice,:Acountry,:Astatus,now(),:Aid,:ACAT) ");
+            $stmt->execute(array(
+            'Aname'        => $name,
+            'Adescribtion' => $desc,
+            'Aprice'       => $price,
+            'Acountry'     => $country,
+            'Astatus'      =>  $status,
+            'Aid'          =>  $_SESSION['uID'],
+            'ACAT'         =>  $categories
+           
+                         )) ;   
+                if($stmt){
+                    echo 'Item added';
+                }           
+            }
+
+}
+    
 ?>
 <h1 class='text-center'><?php echo $pagetitle?></h1>
 <div class='new-ad block'>
@@ -27,7 +59,7 @@ if(isset($_SESSION['user'])){
                         <input type="text"
                             name="name"
                             class="form-control live"
-                            required='required'
+                            required="required"
                             autocomplete="off"
                             data-class=".live-title"
                             placeholder="Name of the Item">
@@ -41,7 +73,7 @@ if(isset($_SESSION['user'])){
                         <input type="text"
                             name="Describtion"
                             class="form-control live"
-                            required='required'
+                             required="required"
                             autocomplete="off" 
                             data-class=".live-desc" 
                             placeholder="Describtion of the Item">
@@ -55,7 +87,7 @@ if(isset($_SESSION['user'])){
                         <input type="text"
                             name="price"
                             class="form-control live"
-                            required='required'
+                             required="required"
                             autocomplete="off"
                             data-class=".live-price"   
                             placeholder="price of the Item">
@@ -69,7 +101,7 @@ if(isset($_SESSION['user'])){
                         <input type="text"
                             name="country"
                             class="form-control "
-                            required='required'
+                            required="required"
                             autocomplete="off" 
                             placeholder="country of the Item">
                                 </div>
@@ -134,6 +166,16 @@ if(isset($_SESSION['user'])){
                     </div>       
                     </div>
                 </div>
+                <?php
+                //statr looping error 
+                if(!empty($formerror)){
+                    foreach($formerror as $error){
+                        echo'<div class="alert alert-danger">'.$error.'</div>';
+                    }
+                }
+               
+                //end looping error 
+                ?>
               </div> 
              </div>
          </div>

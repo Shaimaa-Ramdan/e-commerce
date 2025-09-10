@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
    
     //check if user exist in database
     $stmt= $connect->prepare("SELECT 
-                                     username,password
+                                     userid,username,password
                                FROM 
                                      users     
                                 WHERE      
@@ -23,9 +23,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                                     password=? 
                                  ");
     $stmt->execute(array($user,$hashedpass));
+    $get=$stmt->fetch();
     $count=$stmt->rowCount();
     if($count>0){
         $_SESSION['user']=$user;
+        $_SESSION['uID']=$get['userid'];//register userid in session
         header('location:index.php');
         
             }
